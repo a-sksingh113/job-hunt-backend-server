@@ -8,7 +8,7 @@ import { sendVerificationEmail } from '../../emailService/authEmail/userAuth';
 export const employerSignup = async (req: Request, res: Response) => {
   try {
     const {
-    fullName,
+      fullName,
       email,
       password,
       phone,
@@ -31,7 +31,7 @@ export const employerSignup = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); 
+  const otpExpires = new Date(Date.now() + 10 * 60 * 1000); 
 
 
    const newUser = await User.create({
@@ -39,7 +39,7 @@ export const employerSignup = async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
       role: "employer",
-       isEmailVerified: false,
+      isEmailVerified: false,
       otp,
       otpExpires,
       isApproved:false

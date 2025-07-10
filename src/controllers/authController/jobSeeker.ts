@@ -16,9 +16,8 @@ export const jobSeekerSignup = async (req: Request, res: Response) => {
       location,
       experienceYears,
       skills,
-      resumeUrl,
     } = req.body;
-    const profilePic = req.file?.path || null;
+    const resumeUrl = req.file?.path || null;
 
     const existingUser = await User.findOne({ email });
     if (existingUser)
@@ -36,10 +35,10 @@ export const jobSeekerSignup = async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
       role: "job_seeker",
-       isEmailVerified: false,
+      isEmailVerified: false,
       otp,
       otpExpires,
-        isApproved:false
+      isApproved:false
     });
 
     await JobSeeker.create({
@@ -50,7 +49,6 @@ export const jobSeekerSignup = async (req: Request, res: Response) => {
       experienceYears,
       skills,
       resumeUrl,
-      profilePicUrl: profilePic || null,
     
     });
 

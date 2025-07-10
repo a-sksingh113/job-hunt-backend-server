@@ -68,7 +68,7 @@ export const globalSignin = async (req: Request, res: Response) => {
 
     setTokenCookie(res, token);
 
-    res.status(200).json({ success: true, token });
+    res.status(200).json({ success: true, token,user });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -117,7 +117,7 @@ export const forgotPassword = async (
 
     await sendForgetPasswordOtp(user.email, user.fullName, otp);
 
-    res.status(200).json({ success: true, message: "OTP sent to email" });
+    res.status(200).json({ success: true, message: "OTP sent to email",user });
   } catch (error: any) {
     console.error("Forgot password error:", error);
     res.status(500).json({
@@ -178,6 +178,57 @@ export const verifyEmail = async (
     });
   }
 };
+
+export const verifyOtp = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { otp } = req.body;
+
+    if (!otp) {
+      res
+        .status(400)
+        .json({ success: false, message: "Email and OTP are required" });
+      return;
+    }
+
+    const user = await User.findOne({ otp });
+
+    if (!user) {
+      res.status(404).json({ success: false, message: "User not found" });
+      return;
+    }
+
+    if (
+      !user.otp ||
+      !user.otpExpires ||
+      user.otp !== otp ||
+      user.otpExpires < new Date()
+    ) {
+      res
+        .status(400)
+        .json({ success: false, message: "Invalid or expired OTP" });
+      return;
+    }
+
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Otp verified successfully" });
+  } catch (error: any) {
+    console.error("Verify Otp Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message || error,
+    });
+  }
+};
+
 
 export const resendOtp = async (req: Request, res: Response): Promise<void> => {
   try {

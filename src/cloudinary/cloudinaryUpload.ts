@@ -2,7 +2,7 @@ import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import { cloudinary } from '../config/cloudinaryConfig';
 
-const getUploader = (folderName: string): multer.Multer => {
+const upload = (folderName: string): multer.Multer => {
   const storage = new CloudinaryStorage({
     cloudinary,
     params: async() => ({
@@ -15,4 +15,4 @@ const getUploader = (folderName: string): multer.Multer => {
   return multer({ storage });
 };
 
-export default getUploader;
+export default upload;

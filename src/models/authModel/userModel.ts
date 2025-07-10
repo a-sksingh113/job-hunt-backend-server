@@ -64,7 +64,21 @@ const userSchema = new Schema<IUser>(
   },
   {
     timestamps: true, 
+      toJSON: { virtuals: true }, 
+    toObject: { virtuals: true }, 
   }
 );
+userSchema.virtual('employerDetails', {
+  ref: 'Employer',        
+  localField: '_id',        
+  foreignField: 'userId',   
+  justOne: true,           
+});
+userSchema.virtual('jobSeekerDetails', {
+  ref: 'JobSeeker',
+  localField: '_id',
+  foreignField: 'userId',
+  justOne: true
+});
 
 export default model<IUser>('User', userSchema);

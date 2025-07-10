@@ -1,9 +1,9 @@
 import express from "express";
-import { approveEmployerById, approveJobSeekerById, getAllEmployer, getAllSeeker, rejectEmployerById, rejectJobSeekerById } from "../../controllers/adminController/approval";
+import { approveEmployerById, approveJobSeekerById,getAllPendingEmployer,getAllPendingSeeker,rejectEmployerById, rejectJobSeekerById } from "../../controllers/adminController/approval";
 const router = express.Router();
 
-router.get("/seekers",  getAllSeeker);
-router.get("/employers",  getAllEmployer);
+router.get("/seekers",  getAllPendingSeeker);
+router.get("/employers",  getAllPendingEmployer);
 router.patch("/approve/employer/:id",  approveEmployerById);
 router.patch("/approve/seeker/:id",  approveJobSeekerById);
 router.delete("/reject/employer/:id",  rejectEmployerById);
