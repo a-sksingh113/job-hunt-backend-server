@@ -1,4 +1,4 @@
-import { UserPayload } from '../authService/tokenCreateValidate'; 
+import { UserPayload } from "../../authService/tokenCreateValidate";
 
 declare global {
   namespace Express {
@@ -7,3 +7,4 @@ declare global {
     }
   }
 }
+

@@ -21,6 +21,7 @@ export const handleGetSeekerProfile = async (req: Request, res: Response) => {
 
 export const updateSeekerProfile = async (req: Request, res: Response) => {
   try {
+
     const userId = req.user?.id;
 
     const updated = await JobSeeker.findOneAndUpdate(

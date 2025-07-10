@@ -5,6 +5,7 @@ export interface IUser extends Document {
   fullName: string;
   email: string;
   password: string;
+  phone:string;
   role: UserRole;
   isEmailVerified: boolean;
   isApproved: boolean;
@@ -56,6 +57,9 @@ const userSchema = new Schema<IUser>(
     otpExpires: {
       type: Date,
       default: null,
+    },
+     phone: {
+      type: String,
     },
   },
   {
