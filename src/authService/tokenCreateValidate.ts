@@ -27,14 +27,27 @@ export function createToken(user: UserPayload): string | null {
   }
 }
 
-export function validateToken(token: string): UserPayload | null {
+export function validateToken(token: string | null): UserPayload | null {
   try {
-    if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET is missing in environment variables');
+    if (!token || !process.env.JWT_SECRET) {
+      throw new Error('Token or secret missing');
     }
 
-    const payload = jwt.verify(token, process.env.JWT_SECRET) as UserPayload;
-    return payload;
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Type guard to ensure payload is an object and matches UserPayload
+    if (
+      typeof payload === 'object' &&
+      payload !== null &&
+      'id' in payload &&
+      'email' in payload &&
+      'fullName' in payload &&
+      'role' in payload
+    ) {
+      return payload as UserPayload;
+    } else {
+      throw new Error('Token payload is not a valid UserPayload');
+    }
   } catch (error: any) {
     console.error('Error validating token:', error.message);
     return null;

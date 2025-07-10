@@ -8,6 +8,8 @@ export interface IUser extends Document {
   role: UserRole;
   isEmailVerified: boolean;
   isApproved: boolean;
+    otp?: string;
+  otpExpires?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -46,6 +48,14 @@ const userSchema = new Schema<IUser>(
     isApproved: {
       type: Boolean,
       default: false,
+    },
+       otp: {
+      type: String,
+      default: null,
+    },
+    otpExpires: {
+      type: Date,
+      default: null,
     },
   },
   {

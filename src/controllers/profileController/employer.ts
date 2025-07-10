@@ -1,0 +1,67 @@
+import { Request, Response } from 'express';
+import EmployerModel, { IEmployer } from '../../models/authModel/employer';
+import User from '../../models/authModel/userModel';
+import { Types } from 'mongoose';
+import bcrypt from "bcrypt";
+import { sendVerificationEmail } from '../../emailService/authEmail/userAuth';
+
+
+export const getMyProfile = async (req: Request, res: Response) => {
+  try {
+    const user = req.user as { id: string };
+
+    const employer = await EmployerModel.findOne({ userId: user.id });
+
+    if (!employer) {
+      return res.status(404).json({
+        success: false,
+        message: 'Employer profile not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: employer,
+    });
+  } catch (error: any) {
+    console.error('getMyProfile error:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Server error',
+    });
+  }
+};
+
+export const updateEmployerProfile = async (req: Request, res: Response) => {
+  try {
+    const user = req.user as { id: string };
+
+    const updatedFields = req.body;
+
+    const employer = await EmployerModel.findOneAndUpdate(
+      { userId: user.id },
+      { $set: updatedFields },
+      { new: true }
+    );
+
+    if (!employer) {
+      return res.status(404).json({
+        success: false,
+        message: 'Employer profile not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: employer,
+    });
+  } catch (error: any) {
+    console.error('updateEmployerProfile error:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Server error',
+    });
+  }
+};
+
