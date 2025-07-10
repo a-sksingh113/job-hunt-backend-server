@@ -1,7 +1,7 @@
 /// <reference path="./types/express/index.d.ts" />
 import express from "express";
 import dotenv from "dotenv";
-import cors ,{ CorsOptionsDelegate } from "cors";
+import cors, { CorsOptionsDelegate } from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 
@@ -19,8 +19,8 @@ import allPostedJobRoute from "./routes/general/allJobs";
 import adminProfileRoute from "./routes/admin/profileRoute";
 import applyJobRoute from "./routes/jobSeeker/jobApplication";
 import jobApplicationRoute from "./routes/employer/jobManageRoute";
-import appliedJobRoute from "./routes/jobSeeker/appliedJobRoute"
-
+import appliedJobRoute from "./routes/jobSeeker/appliedJobRoute";
+import recommendJobsRoute from "./routes/recommendation/recommend";
 
 dotenv.config();
 const app = express();
@@ -37,21 +37,24 @@ const allowedOrigins: string[] = [
 ].filter(Boolean) as string[];
 
 const corsOptions: Parameters<typeof cors>[0] = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+  origin: (
+    origin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void
+  ) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS: ' + origin));
+      callback(new Error("Not allowed by CORS: " + origin));
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
-  res.send("Hello from server");
+  res.send("Hello from server its running fine ");
 });
 
 app.use(
@@ -84,10 +87,9 @@ app.use(
   jobPostingRoute,
   jobApplicationRoute
 );
-app.use(
-  "/api/general",
- allPostedJobRoute
-);
+
+app.use("/api/user", authenticationToken, recommendJobsRoute);
+app.use("/api/general", allPostedJobRoute);
 
 mongoose
   .connect(process.env.MONGO_URI as string)
