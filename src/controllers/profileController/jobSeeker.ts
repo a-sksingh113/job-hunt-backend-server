@@ -5,7 +5,7 @@ import JobSeeker from "../../models/authModel/jobSeeker";
 import { IUser } from "../../models/authModel/userModel";
 import { sendVerificationEmail } from "../../emailService/authEmail/userAuth";
 
-export const getMyProfile = async (req: Request, res: Response) => {
+export const handleGetSeekerProfile = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const jobSeeker = await JobSeeker.findOne({ userId }).populate('userId', '-password');

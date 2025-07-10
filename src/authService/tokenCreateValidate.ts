@@ -35,7 +35,6 @@ export function validateToken(token: string | null): UserPayload | null {
 
     const payload = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Type guard to ensure payload is an object and matches UserPayload
     if (
       typeof payload === 'object' &&
       payload !== null &&

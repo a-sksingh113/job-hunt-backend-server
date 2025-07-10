@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import { sendVerificationEmail } from '../../emailService/authEmail/userAuth';
 
 
-export const getMyProfile = async (req: Request, res: Response) => {
+export const handleGetEmployerProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user as { id: string };
 

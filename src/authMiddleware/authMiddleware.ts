@@ -6,7 +6,7 @@ interface AuthenticatedRequest extends Request {
   user?: any; 
 }
 
-const auth = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+const authenticationToken = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
   try {
     let token: string | undefined;
 
@@ -43,4 +43,4 @@ const auth = (req: AuthenticatedRequest, res: Response, next: NextFunction): voi
   }
 };
 
-export default auth;
+export default authenticationToken;
