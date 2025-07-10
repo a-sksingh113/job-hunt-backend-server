@@ -1,6 +1,7 @@
 /// <reference path="./types/express/index.d.ts" />
 import express from "express";
 import dotenv from "dotenv";
+import cors ,{ CorsOptionsDelegate } from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 
@@ -28,6 +29,26 @@ const PORT = process.env.PORT || 2000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+const allowedOrigins: string[] = [
+  process.env.CLIENT_URL,
+  process.env.CLIENT_URL_1,
+  process.env.CLIENT_URL_2,
+].filter(Boolean) as string[];
+
+const corsOptions: Parameters<typeof cors>[0] = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS: ' + origin));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.send("Hello from server");
