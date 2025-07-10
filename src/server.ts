@@ -15,6 +15,7 @@ import employerProfileRoute from "./routes/employer/profileRoute";
 import jobPostingRoute from "./routes/employer/jobPostingRoute";
 import adminApprovalRoute from "./routes/admin/approvalRoute";
 import allPostedJobRoute from "./routes/general/allJobs";
+import adminProfileRoute from "./routes/admin/profileRoute"
 
 
 dotenv.config();
@@ -40,7 +41,8 @@ app.use(
   "/api/admin/dashboard",
   authenticationToken,
   authorizeRoles(["admin"]),
-  adminApprovalRoute
+  adminApprovalRoute,
+  adminProfileRoute
 );
 app.use(
   "/api/jobseeker",

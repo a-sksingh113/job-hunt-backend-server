@@ -2,7 +2,7 @@ import express from 'express';
 import { handleGetEmployerProfile, updateEmployerProfile } from '../../controllers/profileController/employer';
 const router = express.Router();
 
-router.get('/me', handleGetEmployerProfile);
-router.put('/me',  updateEmployerProfile);
+router.get('/profile', handleGetEmployerProfile);
+router.put('/profile/update',  updateEmployerProfile);
 
 export default router;

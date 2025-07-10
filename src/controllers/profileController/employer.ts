@@ -1,21 +1,23 @@
-import { Request, Response } from 'express';
-import EmployerModel, { IEmployer } from '../../models/authModel/employer';
-import User from '../../models/authModel/userModel';
-import { Types } from 'mongoose';
+import { Request, Response } from "express";
+import EmployerModel, { IEmployer } from "../../models/authModel/employer";
+import User from "../../models/authModel/userModel";
+import { Types } from "mongoose";
 import bcrypt from "bcrypt";
-import { sendVerificationEmail } from '../../emailService/authEmail/userAuth';
-
+import { sendVerificationEmail } from "../../emailService/authEmail/userAuth";
 
 export const handleGetEmployerProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user as { id: string };
 
-    const employer = await EmployerModel.findOne({ userId: user.id });
+    const employer = await EmployerModel.findOne({ userId: user.id }).populate(
+      "userId",
+      "-password"
+    );
 
     if (!employer) {
       return res.status(404).json({
         success: false,
-        message: 'Employer profile not found',
+        message: "Employer profile not found",
       });
     }
 
@@ -24,10 +26,10 @@ export const handleGetEmployerProfile = async (req: Request, res: Response) => {
       data: employer,
     });
   } catch (error: any) {
-    console.error('getMyProfile error:', error);
+    console.error("getMyProfile error:", error);
     return res.status(500).json({
       success: false,
-      message: error.message || 'Server error',
+      message: error.message || "Server error",
     });
   }
 };
@@ -35,33 +37,31 @@ export const handleGetEmployerProfile = async (req: Request, res: Response) => {
 export const updateEmployerProfile = async (req: Request, res: Response) => {
   try {
     const user = req.user as { id: string };
-
     const updatedFields = req.body;
 
     const employer = await EmployerModel.findOneAndUpdate(
       { userId: user.id },
       { $set: updatedFields },
       { new: true }
-    );
+    ).populate("userId", "-password");
 
     if (!employer) {
       return res.status(404).json({
         success: false,
-        message: 'Employer profile not found',
+        message: "Employer profile not found",
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Profile updated successfully',
+      message: "Profile updated successfully",
       data: employer,
     });
   } catch (error: any) {
-    console.error('updateEmployerProfile error:', error);
+    console.error("updateEmployerProfile error:", error);
     return res.status(500).json({
       success: false,
-      message: error.message || 'Server error',
+      message: error.message || "Server error",
     });
   }
 };
-

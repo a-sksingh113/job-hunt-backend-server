@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import User from "../../models/authModel/userModel";
 import JobSeeker from "../../models/authModel/jobSeeker";
-import { IUser } from "../../models/authModel/userModel";
-import { sendVerificationEmail } from "../../emailService/authEmail/userAuth";
+
 
 export const handleGetSeekerProfile = async (req: Request, res: Response) => {
   try {
@@ -21,20 +18,33 @@ export const handleGetSeekerProfile = async (req: Request, res: Response) => {
 
 export const updateSeekerProfile = async (req: Request, res: Response) => {
   try {
-
     const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: 'User not authenticated' });
+    }
+
+    const updateFields: any = {
+      ...req.body,
+    };
+
+    if (req.file) {
+      updateFields.resumeUrl = req.file.path;
+    }
 
     const updated = await JobSeeker.findOneAndUpdate(
       { userId },
-      { $set: req.body },
+      { $set: updateFields },
       { new: true }
     );
 
-    if (!updated)
+    if (!updated) {
       return res.status(404).json({ success: false, message: 'Profile not found' });
+    }
 
     res.status(200).json({ success: true, message: 'Profile updated', updated });
   } catch (error: any) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("Update seeker profile error:", error);        
+    console.error("Error message:", error.message);             
+    res.status(500).json({ success: false, message: error.message || "Server error" });
   }
 };

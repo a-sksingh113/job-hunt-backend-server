@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post(
   "/employer-signup",
-  upload("companyLogos").single("companyLogoUrl"),
+  upload.single("companyLogoUrl"),
   employerSignup
 );
 
