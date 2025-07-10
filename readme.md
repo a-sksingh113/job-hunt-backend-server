@@ -36,7 +36,8 @@ src/
 │   ├── employerController/
 │   ├── jobSeekerController/
 │   ├── profileController/
-├── emailService/           # Email OTPs, verifications
+├── emailService/             # Email OTPs, verifications    
+|── recommendationSystem/    #recommend user to best matching job
 ├── models/                 # Mongoose schemas
 ├── redisService/           # Redis config (if used)
 ├── routes/                 # Route files grouped by user type
@@ -45,6 +46,7 @@ src/
 │   ├── employer/
 │   ├── general/
 │   ├── jobSeeker/
+│   ├── recommendationRoute/
 ├── types/                  # Global TypeScript types
 └── server.ts               # App entry point
 ```
@@ -86,7 +88,64 @@ npm run dev
 
 ##  API Overview
 
-On request I will share postman api tested documentation
+
+###  Common Auth (`/api/auth`)
+- `POST /signin`
+- `POST /logout`
+- `POST /forgot-password`
+- `POST /verify-otp`
+- `POST /verify-email`
+- `POST /resend-otp`
+- `POST /reset-password`
+
+---
+
+###  Admin Routes (`/api/admin/dashboard`)
+- `GET /seekers` — Get all pending job seekers
+- `GET /employers` — Get all pending employers
+- `PATCH /approve/seeker/:id`
+- `PATCH /approve/employer/:id`
+- `DELETE /reject/seeker/:id`
+- `DELETE /reject/employer/:id`
+- `GET /profile`
+- `PUT /profile/update`
+
+---
+
+###  Employer Routes (`/api/employer`)
+- `POST /employer-signup` — (with company logo(optional))
+- `GET /profile`
+- `PUT /profile/update`
+- `POST /jobs/jobs-create`
+- `GET /jobs` — View all posted jobs
+- `GET /jobs/:jobId` — View specific job
+- `PUT /jobs/:jobId` — Update job
+- `DELETE /jobs/:jobId`
+- `GET /applications` — All applications to employer's jobs
+- `POST /applications` — Applications for a specific job
+- `PATCH /applications/:id` — Update job application status
+
+---
+
+###  Job Seeker Routes (`/api/jobseeker`)
+- `POST /seeker-signup` — (with resume)
+- `GET /profile`
+- `PUT /profile/update` — (with resume)
+- `POST /jobs/apply` — Apply to job
+- `GET /jobs/applied` — View all applied jobs
+- `GET /jobs/applied/:jobId` — View specific application
+
+---
+
+###  Public Job Routes (`/api/general`)
+- `GET /jobs` — All public jobs
+- `GET /jobs/:id` — Public job details
+
+---
+
+###  Job Recommendations (`/api/user`)
+- `GET /recommend` — Returns jobs where AI score > 7 for current Jobseeker
+
 
 ---
 
