@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 
 import authenticationToken from "./authMiddleware/authMiddleware";
+import authorizeRoles from "./authMiddleware/roleMiddleware";
 import employerAuthRoutes from "./routes/employer/authRoute";
 import seekerAuthRoutes from "./routes/jobSeeker/authRoute";
 import adminAuthRoutes from "./routes/admin/authRoute";
@@ -13,7 +14,8 @@ import jobSeekerProfileRoute from "./routes/jobSeeker/profileRoute";
 import employerProfileRoute from "./routes/employer/profileRoute";
 import jobPostingRoute from "./routes/employer/jobPostingRoute";
 import adminApprovalRoute from "./routes/admin/approvalRoute";
-import authorizeRoles from "./authMiddleware/roleMiddleware";
+import allPostedJobRoute from "./routes/general/allJobs";
+
 
 dotenv.config();
 const app = express();
@@ -52,6 +54,10 @@ app.use(
   authorizeRoles(["employer"]),
   employerProfileRoute,
   jobPostingRoute
+);
+app.use(
+  "/api/general",
+ allPostedJobRoute
 );
 
 mongoose

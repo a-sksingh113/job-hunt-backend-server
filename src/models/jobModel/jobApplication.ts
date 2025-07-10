@@ -34,10 +34,6 @@ const jobApplicationSchema = new Schema<IJobApplication>(
       default: 'applied',
       required: true,
     },
-    coverLetter: {
-      type: String,
-      default: null,
-    },
   },
   {
     timestamps: true, 

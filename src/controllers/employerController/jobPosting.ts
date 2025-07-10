@@ -87,7 +87,7 @@ export const deleteJob = async (req: Request, res: Response): Promise<void> => {
 
 
 
-export const getAllJobs = async (req: Request, res: Response) => {
+export const getAllMyCreatedJobs = async (req: Request, res: Response) => {
 
       if (!req.user) {
       return res.status(401).json({ success: false, message: "Unauthorized" });

@@ -62,7 +62,7 @@ export const getJobById = async (req: Request, res: Response) => {
 
 export const applyToJob = async (req: Request, res: Response) => {
   try {
-    const { jobId, coverLetter } = req.body;
+    const { jobId } = req.body;
     if (!req.user) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
@@ -97,7 +97,6 @@ export const applyToJob = async (req: Request, res: Response) => {
     const application = await JobApplication.create({
       jobId: job._id,
       jobSeekerId: jobSeeker._id,
-      coverLetter,
     });
 
     res.status(201).json({

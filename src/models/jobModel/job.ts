@@ -42,7 +42,6 @@ const jobSchema = new Schema<IJob>(
     acceptedCount: {
       type: Number,
       default: 0,
-      required: true,
     },
     location: {
       type: String,

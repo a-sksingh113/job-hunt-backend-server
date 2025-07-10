@@ -1,7 +1,7 @@
 import express from "express";
 import {
   deleteJob,
-  getAllJobs,
+  getAllMyCreatedJobs,
   getPostedJobById,
   postJob,
   updateJob,
@@ -9,9 +9,9 @@ import {
 
 const router = express.Router();
 
-router.get("/jobs", getAllJobs);
-router.get("/jobs/:jobId", getPostedJobById);
 router.post("/jobs/jobs-create", postJob);
+router.get("/jobs", getAllMyCreatedJobs);
+router.get("/jobs/:jobId", getPostedJobById);
 router.put("/jobs/:jobId", updateJob);
 router.delete("/jobs/:jobId", deleteJob);
 

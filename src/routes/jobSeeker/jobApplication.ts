@@ -1,10 +1,7 @@
 import express from "express";
-import { applyToJob, getAllJobs, getJobById } from "../../controllers/jobSeekerController/allJobPosted";
+import { applyToJob } from "../../controllers/jobSeekerController/allJobPosted";
 const router = express.Router();
-
-
-router.get("/", getAllJobs);               
-router.get("/:id", getJobById);           
-router.post("/apply" ,applyToJob);
+        
+router.post("/jobs/apply" ,applyToJob);
 
 export default router;
