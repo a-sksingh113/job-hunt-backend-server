@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import Job from "../../models/jobModel/job";
 import JobSeeker from "../../models/authModel/jobSeeker";
 import JobApplication from "../../models/jobModel/jobApplication";
+import { getInsightScore } from "../../aiInSight/score"
 
 export const getAllJobs = async (req: Request, res: Response) => {
   try {
@@ -86,17 +87,32 @@ export const applyToJob = async (req: Request, res: Response) => {
     });
 
     if (existingApplication) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "You have already applied to this job",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "You have already applied to this job",
+      });
     }
+
+    const jobText = `
+   ${job.title}. ${job.description}.
+Domain: ${job.domain}.
+Skills required: ${job.skills?.join(", ") || ""}
+    `.trim();
+
+    const seekerText = `
+Domain: ${jobSeeker.domain}.
+Skills: ${jobSeeker.skills?.join(", ") || ""}
+    `.trim();
+
+    const { score: aiInsightScore } = await getInsightScore(
+      jobText,
+      seekerText
+    );
 
     const application = await JobApplication.create({
       jobId: job._id,
       jobSeekerId: jobSeeker._id,
+      aiInsightScore,
     });
 
     res.status(201).json({
@@ -110,5 +126,3 @@ export const applyToJob = async (req: Request, res: Response) => {
       .json({ success: false, message: `Error applying: ${error}` });
   }
 };
-
-
