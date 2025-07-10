@@ -3,8 +3,8 @@ import { getAllApplications, getApplicationsByJobId, updateApplicationStatus } f
 const router = express.Router();
 
 
-router.get("/", getAllApplications);
-router.post("/by-job", getApplicationsByJobId);
-router.patch("/:id/status", updateApplicationStatus);
+router.get("/applications", getAllApplications);
+router.post("/applications", getApplicationsByJobId);
+router.patch("/applications/:id", updateApplicationStatus);
 
 export default router;

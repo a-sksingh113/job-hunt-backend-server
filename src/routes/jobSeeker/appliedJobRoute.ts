@@ -3,7 +3,7 @@ import { getAppliedJobById, getAppliedJobs } from "../../controllers/jobSeekerCo
 const router = express.Router();
 
 
-router.get("/my", getAppliedJobs);            
-router.get("/my/:jobId",  getAppliedJobById); 
+router.get("/jobs/applied", getAppliedJobs);            
+router.get("/jobs/applied/:jobId",  getAppliedJobById); 
 
 export default router;

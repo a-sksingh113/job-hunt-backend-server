@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import Job from "../../models/jobModel/job";
 import JobSeeker from "../../models/authModel/jobSeeker";
 import JobApplication from "../../models/jobModel/jobApplication";
 

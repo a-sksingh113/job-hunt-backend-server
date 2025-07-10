@@ -15,7 +15,10 @@ import employerProfileRoute from "./routes/employer/profileRoute";
 import jobPostingRoute from "./routes/employer/jobPostingRoute";
 import adminApprovalRoute from "./routes/admin/approvalRoute";
 import allPostedJobRoute from "./routes/general/allJobs";
-import adminProfileRoute from "./routes/admin/profileRoute"
+import adminProfileRoute from "./routes/admin/profileRoute";
+import applyJobRoute from "./routes/jobSeeker/jobApplication";
+import jobApplicationRoute from "./routes/employer/jobManageRoute";
+import appliedJobRoute from "./routes/jobSeeker/appliedJobRoute"
 
 
 dotenv.config();
@@ -48,14 +51,17 @@ app.use(
   "/api/jobseeker",
   authenticationToken,
   authorizeRoles(["job_seeker"]),
-  jobSeekerProfileRoute
+  jobSeekerProfileRoute,
+  applyJobRoute,
+  appliedJobRoute
 );
 app.use(
   "/api/employer",
   authenticationToken,
   authorizeRoles(["employer"]),
   employerProfileRoute,
-  jobPostingRoute
+  jobPostingRoute,
+  jobApplicationRoute
 );
 app.use(
   "/api/general",
