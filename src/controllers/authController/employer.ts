@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import EmployerModel, { IEmployer } from '../../models/authModel/employer';
 import User from '../../models/authModel/userModel';
-import { Types } from 'mongoose';
 import bcrypt from "bcrypt";
-import { sendVerificationEmail } from '../../emailService/authEmail/userAuth';
+import jwt from 'jsonwebtoken';
+import { sendVerificationEmailLink } from '../../emailService/authEmail/userAuth';
 
 export const employerSignup = async (req: Request, res: Response) => {
   try {
@@ -30,9 +30,6 @@ export const employerSignup = async (req: Request, res: Response) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  const otpExpires = new Date(Date.now() + 10 * 60 * 1000); 
-
 
    const newUser = await User.create({
       fullName,
@@ -40,8 +37,7 @@ export const employerSignup = async (req: Request, res: Response) => {
       password: hashedPassword,
       role: "employer",
       isEmailVerified: false,
-      otp,
-      otpExpires,
+   
       isApproved:false
     });
 
@@ -59,8 +55,14 @@ export const employerSignup = async (req: Request, res: Response) => {
 
     await newEmployer.save();
 
-    await sendVerificationEmail(newUser.email, otp, newUser.fullName);
-
+   const verificationToken = jwt.sign(
+       { userId: newUser._id },
+       process.env.JWT_SECRET!,
+       { expiresIn: "1h" }
+     );
+ 
+     const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+     await sendVerificationEmailLink(email, fullName, verificationUrl);
     return res.status(201).json({
       success: true,
       message: 'Employer profile created successfully',

@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 import User from "../../models/authModel/userModel";
-import JobSeeker from "../../models/authModel/jobSeeker";
 import { IUser } from "../../models/authModel/userModel";
 import { createToken } from "../../authService/tokenCreateValidate";
 import {
   sendForgetPasswordOtp,
   sendVerificationEmail,
+  sendVerificationEmailLink,
 } from "../../emailService/authEmail/userAuth";
 import setTokenCookie from "../../authService/setTokenCookie";
 import clearTokenCookie from "../../authService/clearTokenCookie";
@@ -176,6 +177,82 @@ export const verifyEmail = async (
       message: "Internal Server Error",
       error: error.message || error,
     });
+  }
+};
+
+
+export const verifyEmailLink = async (req: Request, res: Response) => {
+  try {
+    const { token } = req.params;
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as { userId: string };
+
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid or expired verification link." });
+    }
+
+    if (user.isEmailVerified) {
+      return res
+        .status(200)
+        .json({ success: true, message: "Email already verified." });
+    }
+
+    user.isEmailVerified = true;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Email successfully verified. You can now log in.",
+    });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: "Invalid or expired token." });
+  }
+};
+
+
+export const resendVerificationEmail = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required." });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found." });
+    }
+
+    if (user.isEmailVerified) {
+      return res.status(400).json({ success: false, message: "Email is already verified." });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET!,
+      { expiresIn: "1h" }
+    );
+
+    const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${token}`;
+
+    const emailSent = await sendVerificationEmailLink(email, verificationUrl, user.fullName);
+
+    if (!emailSent) {
+      return res.status(500).json({ success: false, message: "Failed to send email." });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Verification email resent successfully.",
+    });
+  } catch (error: any) {
+    console.error("Resend verification error:", error);
+    return res.status(500).json({ success: false, message: "Server error." });
   }
 };
 

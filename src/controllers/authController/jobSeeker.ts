@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
 import User from "../../models/authModel/userModel";
 import JobSeeker from "../../models/authModel/jobSeeker";
-import { IUser } from "../../models/authModel/userModel";
-import { sendVerificationEmail } from "../../emailService/authEmail/userAuth";
+import {  sendVerificationEmailLink } from "../../emailService/authEmail/userAuth";
 
 export const jobSeekerSignup = async (req: Request, res: Response) => {
   try {
@@ -27,8 +27,6 @@ export const jobSeekerSignup = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); 
 
     const newUser = await User.create({
       fullName,
@@ -36,8 +34,6 @@ export const jobSeekerSignup = async (req: Request, res: Response) => {
       password: hashedPassword,
       role: "job_seeker",
       isEmailVerified: false,
-      otp,
-      otpExpires,
       isApproved:false
     });
 
@@ -52,7 +48,14 @@ export const jobSeekerSignup = async (req: Request, res: Response) => {
     
     });
 
-    await sendVerificationEmail(newUser.email, otp, newUser.fullName);
+  const verificationToken = jwt.sign(
+      { userId: newUser._id },
+      process.env.JWT_SECRET!,
+      { expiresIn: "1h" }
+    );
+
+    const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+    await sendVerificationEmailLink(email, fullName, verificationUrl);
 
     res.status(201).json({ success: true,newUser, JobSeeker });
   } catch (error: any) {
