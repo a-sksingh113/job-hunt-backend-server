@@ -8,6 +8,7 @@ import {  Types } from "mongoose";
 export const getAllApplications = async (_req: Request, res: Response) => {
   try {
     const applications = await JobApplication.find()
+     .select("jobId jobSeekerId aiInsightScore status createdAt updatedAt")
       .populate({
         path: "jobSeekerId",
         populate: {
