@@ -58,8 +58,8 @@ export const sendVerificationEmail = async (
 
 export const sendVerificationEmailLink = async (
   email: string,
+ fullName: string,
   verificationUrl: string,
-  fullName: string
 ): Promise<boolean> => {
   try {
     const mailOptions = {
