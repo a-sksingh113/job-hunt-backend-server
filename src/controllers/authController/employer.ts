@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import EmployerModel, { IEmployer } from '../../models/authModel/employer';
+import EmployerModel from '../../models/authModel/employer';
 import User from '../../models/authModel/userModel';
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';

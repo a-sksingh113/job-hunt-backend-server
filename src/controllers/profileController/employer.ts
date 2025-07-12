@@ -1,9 +1,5 @@
 import { Request, Response } from "express";
-import EmployerModel, { IEmployer } from "../../models/authModel/employer";
-import User from "../../models/authModel/userModel";
-import { Types } from "mongoose";
-import bcrypt from "bcrypt";
-import { sendVerificationEmail } from "../../emailService/authEmail/userAuth";
+import EmployerModel from "../../models/authModel/employer";
 
 export const handleGetEmployerProfile = async (req: Request, res: Response) => {
   try {

@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import JobApplication from "../../models/jobModel/jobApplication";
 import Employer from "../../models/authModel/employer";
 import Job from "../../models/jobModel/job";
-import {  Types } from "mongoose";
 
 
 export const getAllApplications = async (_req: Request, res: Response) => {
