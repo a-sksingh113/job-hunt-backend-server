@@ -1,20 +1,48 @@
 import { transporter } from "../../config/nodemailerConfig";
 
+
+const wrapEmailTemplate = (title: string, content: string): string => {
+  return `
+  <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #eee; border-radius: 10px; background: #fff;">
+    <div style="text-align: center;">
+      <h1 style="color: #d93025; margin-bottom: 10px;">Job Hunt</h1>
+      <p style="color: #888;">Your trusted job discovery platform</p>
+    </div>
+    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+    <h2 style="color: #333;">${title}</h2>
+    <div style="font-size: 15px; color: #444; line-height: 1.6;">
+      ${content}
+    </div>
+    <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
+    <p style="font-size: 13px; color: #999; text-align: center;">
+      This is an automated email from <strong>Job Hunt</strong>. Please do not reply.
+    </p>
+  </div>
+  `;
+};
+
 export const sendForgetPasswordOtp = async (
   toEmail: string,
+  name: string,
   otp: string,
-  name: string
 ): Promise<boolean> => {
   try {
+    const html = wrapEmailTemplate(
+      'Reset Your Password',
+      `
+        <p>Hello <strong>${name}</strong>,</p>
+        <p>We received a request to reset your password. Use the OTP below to continue:</p>
+        <p style="font-size: 22px; font-weight: bold; color: #d93025;">${otp}</p>
+        <p>This OTP is valid for <strong>10 minutes</strong>.</p>
+        <p>If you didn’t request this, please ignore this email.</p>
+      `
+    );
+
     const mailOptions = {
-      from: `"OpportunityHub" <${process.env.ADMIN_EMAIL}>`,
+      from: `"Job Hunt" <${process.env.ADMIN_EMAIL}>`,
       to: toEmail,
-      subject: "Your OTP for Email Verification",
-      html: `
-        <p>Hello, ${name},</p>
-        <p>Your OTP for email verification is: <b>${otp}</b></p>
-        <p>This OTP is valid for 10 minutes.</p>
-      `,
+      subject: "Reset Your Password - OTP",
+      html,
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -28,22 +56,26 @@ export const sendForgetPasswordOtp = async (
 
 export const sendVerificationEmail = async (
   email: string,
+  fullName: string,
   otp: string,
-  fullName: string
 ): Promise<boolean> => {
   try {
-    const mailOptions = {
-      from: `"OpportunityHub" <${process.env.ADMIN_EMAIL}>`,
-      to: email,
-      subject: 'Verify your email - OpportunityHub',
-      html: `
+    const html = wrapEmailTemplate(
+      'Verify Your Email',
+      `
         <p>Hello <strong>${fullName}</strong>,</p>
-        <p>Thank you for registering on <strong>OpportunityHub</strong>.</p>
+        <p>Thank you for signing up for <strong>Job Hunt</strong>.</p>
         <p>Your email verification OTP is:</p>
-        <h2>${otp}</h2>
-        <p>This OTP is valid for 10 minutes. Please do not share it with anyone.</p>
-        <p>Best regards,<br/>OpportunityHub Team</p>
-      `,
+        <p style="font-size: 22px; font-weight: bold; color: #d93025;">${otp}</p>
+        <p>This OTP is valid for <strong>10 minutes</strong>. Please do not share it with anyone.</p>
+      `
+    );
+
+    const mailOptions = {
+      from: `"Job Hunt" <${process.env.ADMIN_EMAIL}>`,
+      to: email,
+      subject: 'Verify Your Email - Job Hunt',
+      html,
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -56,40 +88,40 @@ export const sendVerificationEmail = async (
 };
 
 
+
 export const sendVerificationEmailLink = async (
   email: string,
- fullName: string,
+  fullName: string,
   verificationUrl: string,
 ): Promise<boolean> => {
   try {
-    const mailOptions = {
-      from: `"OpportunityHub" <${process.env.ADMIN_EMAIL}>`,
-      to: email,
-      subject: 'Verify your email - OpportunityHub',
-      html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-          <h2>Hello ${fullName},</h2>
-          <p>Thank you for registering on <strong>OpportunityHub</strong>.</p>
-          <p>Please click the button below to verify your email address:</p>
+    const html = wrapEmailTemplate(
+      'Activate Your Account',
+      `
+        <p>Hello <strong>${fullName}</strong>,</p>
+        <p>Thanks for joining <strong>Job Hunt</strong>! Please verify your email by clicking the button below:</p>
+        <div style="text-align: center; margin: 20px 0;">
           <a href="${verificationUrl}" 
              style="
-                display: inline-block;
-                margin-top: 10px;
-                padding: 10px 20px;
-                background-color: #4CAF50;
+                padding: 12px 25px;
+                background-color: #d93025;
                 color: white;
                 text-decoration: none;
                 border-radius: 5px;
+                font-weight: bold;
              ">
              Verify Email
           </a>
-          <p>If the button above doesn't work, you can copy and paste this URL into your browser:</p>
-          <p style="word-wrap: break-word;">${verificationUrl}</p>
-          <p>This link is valid for 1 hour.</p>
-          <br />
-          <p>Best regards,<br />OpportunityHub Team</p>
         </div>
-      `,
+        <p>This link is valid for <strong>1 hour</strong>.</p>
+      `
+    );
+
+    const mailOptions = {
+      from: `"Job Hunt" <${process.env.ADMIN_EMAIL}>`,
+      to: email,
+      subject: 'Verify Your Email - Job Hunt',
+      html,
     };
 
     const info = await transporter.sendMail(mailOptions);
