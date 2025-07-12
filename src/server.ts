@@ -1,7 +1,7 @@
 /// <reference path="./types/express/index.d.ts" />
 import express from "express";
 import dotenv from "dotenv";
-import cors, { CorsOptionsDelegate } from "cors";
+import cors from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 

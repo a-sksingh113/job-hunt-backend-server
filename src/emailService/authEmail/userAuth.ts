@@ -132,3 +132,55 @@ export const sendVerificationEmailLink = async (
     return false;
   }
 };
+
+export const sendSignupNotificationToAdmin = async (
+  fullName: string,
+  email: string
+): Promise<boolean> => {
+  try {
+    const dashboardUrl = process.env.ADMIN_DASHBOARD_URL;
+
+    const html = wrapEmailTemplate(
+      'New User Signup – Action Required',
+      `
+        <p>Hello Admin,</p>
+        <p>A new user has just signed up on <strong>Job Hunt</strong>.</p>
+        <ul>
+          <li><strong>Name:</strong> ${fullName}</li>
+          <li><strong>Email:</strong> ${email}</li>
+        </ul>
+        <p>Please review and approve the account from the admin dashboard:</p>
+        <div style="text-align: center; margin: 20px 0;">
+          <a href="${dashboardUrl}" 
+             style="
+                padding: 10px 20px;
+                background-color: #1a73e8;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+             ">
+             Go to Admin Dashboard
+          </a>
+        </div>
+        <p>Or directly visit: <br/><a href="${dashboardUrl}">${dashboardUrl}</a></p>
+      `
+    );
+
+    const mailOptions = {
+      from: `"Job Hunt" <${process.env.ADMIN_EMAIL}>`,
+      to: process.env.ADMIN_EMAIL,
+      subject: 'New Signup – Approval Needed',
+      html,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Admin notification email sent:', info.messageId);
+    return true;
+  } catch (error) {
+    console.error('Error sending admin signup notification:', error);
+    return false;
+  }
+};
+
+

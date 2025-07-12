@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import JobApplication from "../../models/jobModel/jobApplication";
 import Employer from "../../models/authModel/employer";
 import Job from "../../models/jobModel/job";
+import { Types } from "mongoose";
 
 
 export const getAllApplications = async (_req: Request, res: Response) => {
@@ -24,6 +25,41 @@ export const getAllApplications = async (_req: Request, res: Response) => {
     res.status(500).json({ success: false, message: `Error: ${error}` });
   }
 };
+
+
+export const getApplicationsByEmployer = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id as string;
+    const employer = await Employer.findOne({ userId: new Types.ObjectId(userId) });
+    if (!employer) {
+      return res.status(404).json({ success: false, message: "Employer profile not found" });
+    }
+
+    const jobs = await Job.find({ employerId: employer._id }).select("_id");
+    const jobIds = jobs.map(job => job._id);
+
+    const applications = await JobApplication.find({ jobId: { $in: jobIds } })
+      .select("jobId jobSeekerId aiInsightScore status createdAt updatedAt")
+      .populate({
+        path: "jobSeekerId",
+        populate: {
+          path: "userId",
+          model: "User",
+          select: "fullName email",
+        },
+      })
+      .populate({
+        path: "jobId",
+        select: "title location jobType createdAt deadline",
+      });
+
+    res.status(200).json({ success: true, applications });
+  } catch (error) {
+    console.error("getApplicationsByEmployer Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
 
 export const getApplicationsByJobId = async (req: Request, res: Response) => {
   const { jobId } = req.body;

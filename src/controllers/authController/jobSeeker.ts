@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import User from "../../models/authModel/userModel";
 import JobSeeker from "../../models/authModel/jobSeeker";
-import {  sendVerificationEmailLink } from "../../emailService/authEmail/userAuth";
+import {  sendSignupNotificationToAdmin, sendVerificationEmailLink } from "../../emailService/authEmail/userAuth";
 
 export const jobSeekerSignup = async (req: Request, res: Response) => {
   try {
@@ -56,7 +56,9 @@ export const jobSeekerSignup = async (req: Request, res: Response) => {
 
     const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
     await sendVerificationEmailLink(email, fullName, verificationUrl);
+    await sendSignupNotificationToAdmin(fullName, email);
 
+    
     res.status(201).json({ success: true,newUser, JobSeeker });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });

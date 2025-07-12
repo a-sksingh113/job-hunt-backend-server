@@ -4,7 +4,7 @@ import cache from "../../redisService/redisMiddleware";
 const router = express.Router();
 
 
-router.get("/jobs/applied",cache(30), getAppliedJobs);            
+router.get("/jobs/applied",cache(10), getAppliedJobs);            
 router.get("/jobs/applied/:jobId",  getAppliedJobById); 
 
 export default router;

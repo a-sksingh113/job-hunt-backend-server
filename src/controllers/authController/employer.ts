@@ -3,7 +3,7 @@ import EmployerModel from '../../models/authModel/employer';
 import User from '../../models/authModel/userModel';
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
-import { sendVerificationEmailLink } from '../../emailService/authEmail/userAuth';
+import { sendSignupNotificationToAdmin, sendVerificationEmailLink } from '../../emailService/authEmail/userAuth';
 
 export const employerSignup = async (req: Request, res: Response) => {
   try {
@@ -63,6 +63,7 @@ export const employerSignup = async (req: Request, res: Response) => {
  
      const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
      await sendVerificationEmailLink(email, fullName, verificationUrl);
+        await sendSignupNotificationToAdmin(fullName, email);
     return res.status(201).json({
       success: true,
       message: 'Employer profile created successfully',
