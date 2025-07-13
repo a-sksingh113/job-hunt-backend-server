@@ -1,6 +1,6 @@
 import express from "express";
-import { getAppliedJobById, getAppliedJobs } from "../../controllers/jobSeekerController/allAppliedJob";
-import cache from "../../redisService/redisMiddleware";
+import { getAppliedJobById, getAppliedJobs } from "../../controllers/jobSeekerController/allAppliedJob.js";
+import cache from "../../redisService/redisMiddleware.js";
 const router = express.Router();
 
 

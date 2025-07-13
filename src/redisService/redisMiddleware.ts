@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import redis from '../config/redisConfig';
+import redis from '../config/redisConfig.js';
 
 const cache = (ttl: number = 300) => {
   return async (req: Request, res: Response, next: NextFunction) => {

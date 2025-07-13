@@ -1,6 +1,6 @@
 import express from 'express';
-import { handleGetSeekerProfile, updateSeekerProfile } from '../../controllers/profileController/jobSeeker';
-import upload from '../../cloudinary/cloudinaryUpload';
+import { handleGetSeekerProfile, updateSeekerProfile } from '../../controllers/profileController/jobSeeker.js';
+import {upload} from '../../cloudinary/cloudinaryUpload.js';
 
 const router = express.Router();
 

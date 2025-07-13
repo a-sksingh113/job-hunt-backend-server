@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import User from "../../models/authModel/userModel";
-import JobSeeker from "../../models/authModel/jobSeeker";
-import Employer from "../../models/authModel/employer";
+import User from "../../models/authModel/userModel.js";
+import JobSeeker from "../../models/authModel/jobSeeker.js";
+import Employer from "../../models/authModel/employer.js";
 import {
   sendApprovalEmail,
   sendRejectionEmail,
-} from "../../emailService/approvalEmail/userApproval";
+} from "../../emailService/approvalEmail/userApproval.js";
 
 export const getAllPendingSeeker = async (_req: Request, res: Response) => {
   try {

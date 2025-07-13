@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import Job from "../../models/jobModel/job";
-import JobSeeker from "../../models/authModel/jobSeeker";
-import JobApplication from "../../models/jobModel/jobApplication";
-import { getInsightScore } from "../../aiInSight/score"
+import Job from "../../models/jobModel/job.js";
+import JobSeeker from "../../models/authModel/jobSeeker.js";
+import JobApplication from "../../models/jobModel/jobApplication.js";
+import { getInsightScore } from "../../aiInSight/score.js"
 
 export const getAllJobs = async (req: Request, res: Response) => {
   try {

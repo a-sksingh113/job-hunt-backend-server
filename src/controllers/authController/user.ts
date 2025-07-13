@@ -2,16 +2,16 @@ import { Request, Response } from "express";
 import { Types } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
-import User from "../../models/authModel/userModel";
-import { IUser } from "../../models/authModel/userModel";
-import { createToken } from "../../authService/tokenCreateValidate";
+import User from "../../models/authModel/userModel.js";
+import { IUser } from "../../models/authModel/userModel.js";
+import { createToken } from "../../authService/tokenCreateValidate.js";
 import {
   sendForgetPasswordOtp,
   sendVerificationEmail,
   sendVerificationEmailLink,
-} from "../../emailService/authEmail/userAuth";
-import setTokenCookie from "../../authService/setTokenCookie";
-import clearTokenCookie from "../../authService/clearTokenCookie";
+} from "../../emailService/authEmail/userAuth.js";
+import setTokenCookie from "../../authService/setTokenCookie.js";
+import clearTokenCookie from "../../authService/clearTokenCookie.js";
 
 
 //globalSignin

@@ -1,15 +1,24 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
-    "rootDir": "./src",
+    "module": "ESNext",                    // Good for ESM
+    "moduleResolution": "node",           
     "outDir": "./dist",
-    "esModuleInterop": true,
+    "rootDir": "./src",
+
+    "allowSyntheticDefaultImports": true, // Optional but useful with ESM libs
+    "esModuleInterop": true,              // Needed for CommonJS libs
+    "resolveJsonModule": true,            // If you import .json files
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
+    
     "typeRoots": ["./node_modules/@types", "./src/types"],
-     "baseUrl": "./src"
+    "baseUrl": "./src",
+      "paths": {
+      "@config/*": ["config/*"]
+    }
   },
-   "include": ["src"] 
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

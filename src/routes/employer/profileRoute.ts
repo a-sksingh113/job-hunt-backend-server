@@ -1,5 +1,5 @@
 import express from 'express';
-import { handleGetEmployerProfile, updateEmployerProfile } from '../../controllers/profileController/employer';
+import { handleGetEmployerProfile, updateEmployerProfile } from '../../controllers/profileController/employer.js';
 const router = express.Router();
 
 router.get('/profile', handleGetEmployerProfile);

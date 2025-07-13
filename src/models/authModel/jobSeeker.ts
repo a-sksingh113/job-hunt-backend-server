@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema, model, Types } from 'mongoose';
-import { IUser } from '../authModel/userModel'; 
+import { IUser } from '../authModel/userModel.js'; 
 
 export type AvailabilityStatus = 'available' | 'not_available' | 'employed';
 

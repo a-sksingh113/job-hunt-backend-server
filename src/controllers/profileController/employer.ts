@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import EmployerModel from "../../models/authModel/employer";
+import EmployerModel from "../../models/authModel/employer.js";
 
 export const handleGetEmployerProfile = async (req: Request, res: Response) => {
   try {

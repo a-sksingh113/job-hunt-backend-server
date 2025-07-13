@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { parse } from 'cookie';
-import { validateToken } from '../authService/tokenCreateValidate';
+import { validateToken } from '../authService/tokenCreateValidate.js';
 
 const authenticationToken = (req: Request, res: Response, next: NextFunction): void => {
   try {

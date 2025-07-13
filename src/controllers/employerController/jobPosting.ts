@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import Employer from "../../models/authModel/employer";
-import Job from "../../models/jobModel/job";
+import Employer from "../../models/authModel/employer.js";
+import Job from "../../models/jobModel/job.js";
 
 export const postJob = async (req: Request, res: Response): Promise<void> => {
   const userId = req.user?.id as string;

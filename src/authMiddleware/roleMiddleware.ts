@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserPayload } from '../authService/tokenCreateValidate'; 
+import { UserPayload } from '../authService/tokenCreateValidate.js'; 
 
 const authorizeRoles = (roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {

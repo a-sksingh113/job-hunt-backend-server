@@ -1,4 +1,4 @@
-import { transporter } from "../../config/nodemailerConfig";
+import { transporter } from "../../config/nodemailerConfig.js";
 
 
 const wrapEmailTemplate = (title: string, content: string): string => {

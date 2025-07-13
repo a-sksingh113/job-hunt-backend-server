@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import JobApplication from "../../models/jobModel/jobApplication";
-import Employer from "../../models/authModel/employer";
-import Job from "../../models/jobModel/job";
+import JobApplication from "../../models/jobModel/jobApplication.js";
+import Employer from "../../models/authModel/employer.js";
+import Job from "../../models/jobModel/job.js";
 import { Types } from "mongoose";
 
 

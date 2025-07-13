@@ -1,16 +1,9 @@
+// src/cloudinary/cloudinaryUpload.ts
 import multer, { StorageEngine } from 'multer';
-import { v2 as cloudinary, ConfigOptions } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import { Request } from 'express';
 import { Options } from 'multer-storage-cloudinary';
-
-const config: ConfigOptions = {
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
-  api_key: process.env.CLOUDINARY_API_KEY!,
-  api_secret: process.env.CLOUDINARY_API_SECRET!,
-};
-
-cloudinary.config(config);
+import { cloudinary } from '../config/cloudinary.js'; 
 
 const storage: StorageEngine = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -20,9 +13,9 @@ const storage: StorageEngine = new CloudinaryStorage({
 
     const fileExt = file.originalname.split('.').pop() || 'file';
     const baseName = file.originalname
-      .replace(/\.[^/.]+$/, '') 
-      .replace(/\s+/g, '_')     
-      .replace(/\W+/g, '');     
+      .replace(/\.[^/.]+$/, '')
+      .replace(/\s+/g, '_')
+      .replace(/\W+/g, '');
 
     const publicId = `${Date.now()}_${baseName}.${fileExt}`;
 
@@ -42,4 +35,4 @@ const storage: StorageEngine = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
-export default upload;
+export { upload };

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import EmployerModel from '../../models/authModel/employer';
-import User from '../../models/authModel/userModel';
+import EmployerModel from '../../models/authModel/employer.js';
+import User from '../../models/authModel/userModel.js';
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
-import { sendSignupNotificationToAdmin, sendVerificationEmailLink } from '../../emailService/authEmail/userAuth';
+import { sendSignupNotificationToAdmin, sendVerificationEmailLink } from '../../emailService/authEmail/userAuth.js';
 
 export const employerSignup = async (req: Request, res: Response) => {
   try {

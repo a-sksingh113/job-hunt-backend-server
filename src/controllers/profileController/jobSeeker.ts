@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import JobSeeker from "../../models/authModel/jobSeeker";
+import JobSeeker from "../../models/authModel/jobSeeker.js";
 
 
 export const handleGetSeekerProfile = async (req: Request, res: Response) => {

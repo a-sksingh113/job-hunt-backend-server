@@ -1,6 +1,6 @@
 import express from "express";
-import { approveEmployerById, approveJobSeekerById,getAllPendingEmployer,getAllPendingSeeker,rejectEmployerById, rejectJobSeekerById } from "../../controllers/adminController/approval";
-import cache from ".././../redisService/redisMiddleware";
+import { approveEmployerById, approveJobSeekerById,getAllPendingEmployer,getAllPendingSeeker,rejectEmployerById, rejectJobSeekerById } from "../../controllers/adminController/approval.js";
+import cache from ".././../redisService/redisMiddleware.js";
 const router = express.Router();
 
 router.get("/seekers", cache(10), getAllPendingSeeker);

@@ -5,8 +5,8 @@ import {
   getPostedJobById,
   postJob,
   updateJob,
-} from "../../controllers/employerController/jobPosting";
-import cache from "../../redisService/redisMiddleware";
+} from "../../controllers/employerController/jobPosting.js";
+import cache from "../../redisService/redisMiddleware.js";
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import express from "express";
-import {  getApplicationsByEmployer, getApplicationsByJobId, updateApplicationStatus } from "../../controllers/employerController/jobManagement";
-import cache from "../../redisService/redisMiddleware";
+import {  getApplicationsByEmployer, getApplicationsByJobId, updateApplicationStatus } from "../../controllers/employerController/jobManagement.js";
+import cache from "../../redisService/redisMiddleware.js";
 const router = express.Router();
 
 
