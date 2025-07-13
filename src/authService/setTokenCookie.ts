@@ -5,8 +5,8 @@ import { Response } from 'express';
 const setTokenCookie = (res: Response, token: string): void => {
   const cookie = serialize('token', token, {
     httpOnly: true,
-    secure: false, 
-    sameSite: 'lax',
+    secure: true, 
+    sameSite: 'none',
     path: '/',
     maxAge: 60 * 60 * 24, 
   });

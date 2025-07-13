@@ -138,7 +138,7 @@ export const sendSignupNotificationToAdmin = async (
   email: string
 ): Promise<boolean> => {
   try {
-    const dashboardUrl = process.env.ADMIN_DASHBOARD_URL;
+    
 
     const html = wrapEmailTemplate(
       'New User Signup – Action Required',
@@ -149,21 +149,9 @@ export const sendSignupNotificationToAdmin = async (
           <li><strong>Name:</strong> ${fullName}</li>
           <li><strong>Email:</strong> ${email}</li>
         </ul>
-        <p>Please review and approve the account from the admin dashboard:</p>
-        <div style="text-align: center; margin: 20px 0;">
-          <a href="${dashboardUrl}" 
-             style="
-                padding: 10px 20px;
-                background-color: #1a73e8;
-                color: white;
-                text-decoration: none;
-                border-radius: 5px;
-                font-weight: bold;
-             ">
-             Go to Admin Dashboard
-          </a>
-        </div>
-        <p>Or directly visit: <br/><a href="${dashboardUrl}">${dashboardUrl}</a></p>
+        <p>Please review and approve the account from the admin dashboard</p>
+       
+       
       `
     );
 
